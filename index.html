@@ -1,0 +1,577 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دیوان | رزومه ادبی</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --gold:#d5ae65;
+  --gold-light:#f1d9a4;
+  --ink:#20150e;
+  --dark:#100d09;
+  --paper:#ead7b3;
+  --paper-dark:#d0b58a;
+  --text:#f8edd8;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:75px}
+body{
+  margin:0;
+  background:var(--dark);
+  color:var(--text);
+  font-family:Vazirmatn,Tahoma,sans-serif;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+::selection{background:var(--gold);color:var(--ink)}
+
+/* نوار پیشرفت اسکرول */
+#progress{
+  position:fixed;top:0;right:0;height:3px;width:0;
+  background:var(--gold);z-index:1000;
+}
+
+/* پس‌زمینه سینمایی */
+.hero{
+  min-height:100svh;
+  position:relative;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  padding:125px 8% 100px;
+  background:#17110b;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(270deg,#100d09e8 0%,#100d0999 48%,#100d0940 100%),
+    url("https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=2000&q=85")
+    center/cover;
+  transform:scale(1.06);
+  animation:backgroundEnter 2s ease both;
+}
+.hero:after{
+  content:"";
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(0deg,var(--dark),transparent 25%,transparent 80%,#100d0999);
+}
+@keyframes backgroundEnter{
+  from{transform:scale(1.15);opacity:.5}
+  to{transform:scale(1.06);opacity:1}
+}
+
+/* منوی سنتی */
+nav{
+  position:absolute;top:0;right:0;left:0;
+  z-index:10;
+  padding:22px 7%;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid #d5ae6530;
+  background:#100d0930;
+  backdrop-filter:blur(8px);
+}
+.brand{font-size:21px;color:var(--gold-light);font-weight:800}
+.brand span{font-family:serif;margin-left:7px}
+.nav-links{display:flex;gap:25px;font-size:13px}
+.nav-links a{transition:color .3s}
+.nav-links a:hover{color:var(--gold)}
+
+/* عنوان و پروفایل */
+.hero-content{
+  position:relative;z-index:2;
+  width:min(720px,100%);
+  animation:enter 1.2s ease both;
+}
+.eyebrow{color:var(--gold);font-size:12px;letter-spacing:2px}
+h1{
+  font-size:clamp(40px,7vw,78px);
+  line-height:1.55;margin:14px 0;
+  font-weight:800;color:var(--gold-light);
+}
+.calligraphy{
+  font-family:"Noto Nastaliq Urdu",serif;
+  font-size:clamp(25px,4vw,43px);
+  line-height:2;color:var(--gold);
+}
+.hero-description{
+  color:#e6d9c4;line-height:2.5;
+  max-width:550px;font-size:14px;
+}
+.profile{
+  display:flex;align-items:center;gap:18px;margin-top:30px;
+}
+.profile-frame{
+  width:92px;height:92px;flex-shrink:0;
+  border:2px solid var(--gold);
+  outline:1px solid #d5ae6570;
+  outline-offset:5px;border-radius:50%;
+  overflow:hidden;cursor:pointer;
+  box-shadow:0 0 25px #d5ae6520;
+}
+.profile-frame img{width:100%;height:100%;object-fit:cover}
+.profile-name{font-weight:800;color:var(--gold-light)}
+.profile-role{font-size:12px;color:#d1c0a4}
+.scroll-cue{
+  position:absolute;bottom:35px;right:50%;
+  transform:translateX(50%);z-index:3;
+  color:var(--gold);font-size:12px;
+  animation:bob 2s infinite;
+}
+@keyframes bob{50%{transform:translate(50%,8px)}}
+@keyframes enter{
+  from{opacity:0;transform:translateY(25px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* تصویر پروفایل بزرگ‌شونده */
+#scroll-photo{
+  position:fixed;inset:0;
+  z-index:1;width:100%;height:100%;
+  object-fit:cover;pointer-events:none;
+  opacity:0;clip-path:inset(0 0 0 0);
+  filter:sepia(.35) brightness(.48);
+  will-change:clip-path,opacity;
+}
+.photo-shade{
+  position:fixed;inset:0;z-index:1;
+  pointer-events:none;opacity:0;
+  background:linear-gradient(0deg,#100d09 0%,#100d0950 65%,#100d0980);
+}
+
+/* تزئینات */
+.ornament{
+  color:var(--gold);font-size:24px;
+  margin-bottom:10px;
+}
+.section-title{margin-bottom:35px}
+.section-title small{color:var(--gold);letter-spacing:1px}
+.section-title h2{font-size:clamp(26px,4vw,39px);margin:8px 0}
+.section-title p{color:#a9977c;font-size:13px}
+
+/* بخش‌های کاغذی */
+.paper{
+  position:relative;
+  color:var(--ink);
+  background-color:var(--paper);
+  background-image:
+    radial-gradient(ellipse at 10% 20%,#a77a3420,transparent 40%),
+    radial-gradient(ellipse at 90% 80%,#7b512320,transparent 45%),
+    repeating-linear-gradient(0deg,#ffffff08 0px,#ffffff08 1px,transparent 1px,transparent 4px);
+}
+.paper:before{
+  content:"❧ ✦ ❧";
+  display:block;text-align:center;
+  color:#916b32;font-size:23px;padding-top:28px;
+}
+.section{
+  padding:75px 9%;
+  position:relative;z-index:2;
+}
+.section-inner{max-width:1050px;margin:auto}
+.paper .section-title h2{color:#382519}
+.paper .section-title p{color:#775b3b}
+.about-grid{
+  display:grid;grid-template-columns:1fr 180px;gap:30px;align-items:center;
+}
+.about-text{line-height:2.7;color:#4b3827;font-size:14px}
+.quote{
+  border-right:3px solid #99713a;
+  padding:8px 18px;color:#745126;
+  font-family:"Noto Nastaliq Urdu",serif;
+  font-size:22px;line-height:2.2;
+}
+.about-emblem{
+  font-size:100px;text-align:center;
+  color:#99713a;opacity:.6;
+}
+
+/* مهارت‌ها */
+.dark-section{
+  background:
+    radial-gradient(ellipse at top,#34241455,transparent 60%),
+    #15120d;
+  color:var(--text);
+  border-top:1px solid #d5ae6540;
+  border-bottom:1px solid #d5ae6540;
+}
+.skills{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:15px;
+}
+.skill{text-align:center;padding:20px 8px}
+.skill-icon{
+  width:65px;height:65px;
+  border:1px solid var(--gold);
+  border-radius:50%;margin:0 auto 13px;
+  display:grid;place-items:center;
+  font-size:25px;color:var(--gold);
+  transition:.35s;
+}
+.skill:hover .skill-icon{
+  background:var(--gold);color:var(--dark);
+  transform:rotate(-8deg) scale(1.08);
+}
+.skill p{font-size:12px;color:#e2cda8}
+
+/* تاریخ شعر */
+.timeline{
+  border-right:1px solid #a37b43;
+  padding-right:28px;
+}
+.timeline-item{position:relative;margin-bottom:30px}
+.timeline-item:before{
+  content:"";position:absolute;
+  right:-34px;top:9px;width:11px;height:11px;
+  border-radius:50%;background:#9c7337;
+  border:2px solid var(--paper);
+}
+.timeline-item h3{margin:0 0 8px;color:#442d1c}
+.timeline-item p{color:#6b5036;line-height:2.3;font-size:13px}
+
+/* آثار */
+.works{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
+}
+.work{
+  border:1px solid #d5ae6550;
+  background:#ffffff06;overflow:hidden;
+  transition:transform .35s,border-color .35s;
+}
+.work:hover{transform:translateY(-7px);border-color:var(--gold)}
+.work img{width:100%;height:155px;object-fit:cover;display:block;filter:sepia(.3)}
+.work-body{padding:18px}
+.work h3{color:var(--gold-light);font-size:16px}
+.work p{color:#b8aa91;font-size:12px;line-height:2.1}
+
+/* تماس */
+.contact-grid{
+  display:flex;flex-wrap:wrap;gap:15px;margin-top:25px;
+}
+.contact-link{
+  padding:12px 17px;border:1px solid #96703a;
+  border-radius:4px;color:#4c3520;font-size:13px;
+  transition:.3s;
+}
+.contact-link:hover{background:#4c3520;color:#f3dfb6}
+
+footer{
+  padding:30px 15px;text-align:center;
+  color:#c7ad7b;background:#100d09;
+  border-top:1px solid #d5ae6535;
+  font-size:12px;
+}
+footer .calligraphy{font-size:22px}
+
+.reveal{
+  opacity:0;transform:translateY(28px);
+  transition:opacity .8s ease,transform .8s ease;
+}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:700px){
+  nav{padding:16px 5%}
+  .nav-links{gap:10px;font-size:10px}
+  .brand{font-size:16px}
+  .hero{padding:130px 7% 100px}
+  .section{padding:55px 7%}
+  .about-grid{grid-template-columns:1fr}
+  .about-emblem{display:none}
+  .skills{grid-template-columns:repeat(2,1fr)}
+  .works{grid-template-columns:1fr}
+  .work img{height:190px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation:none!important;transition:none!important;
+    scroll-behavior:auto!important;
+  }
+  .reveal{opacity:1;transform:none}
+}
+@media print{
+  #scroll-photo,.photo-shade,#progress,.scroll-cue{display:none}
+  body{background:white}
+  .hero{min-height:auto;padding:100px 30px}
+  .section{break-inside:avoid}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+
+<body>
+<div id="progress"></div>
+
+<!-- عکس بزرگ‌شونده در اسکرول -->
+<img id="scroll-photo" src="" alt="">
+<div class="photo-shade" id="photo-shade"></div>
+
+<header class="hero" id="home">
+  <div class="hero-bg"></div>
+
+  <nav>
+    <a class="brand" href="#home">❈ دیوان</a>
+    <div class="nav-links">
+      <a href="#about">درباره من</a>
+      <a href="#history">تاریخ شعر</a>
+      <a href="#works">آثار</a>
+      <a href="#contact">ارتباط</a>
+    </div>
+  </nav>
+
+  <div class="hero-content">
+    <div class="ornament">❧ ✦ ❧</div>
+    <div class="eyebrow">پرونده شخصی ادبیات فارسی</div>
+    <h1 contenteditable="true">نام و نام خانوادگی</h1>
+    <div class="calligraphy">علاقه‌مند به شعر، ادب و تاریخ</div>
+
+    <p class="hero-description" contenteditable="true">
+      در میان واژه‌ها به دنبال معنا می‌گردم؛
+      و در تاریخ شعر، رد پای انسانیت را جست‌وجو می‌کنم.
+    </p>
+
+    <div class="profile">
+      <div class="profile-frame" id="profile-frame" title="انتخاب عکس">
+        <img id="small-photo"
+        src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=500&q=80"
+        alt="تصویر پروفایل">
+      </div>
+      <div>
+        <div class="profile-name" contenteditable="true">نام ادبی شما</div>
+        <div class="profile-role" contenteditable="true">شعر · ادب · پژوهش</div>
+      </div>
+    </div>
+    <input id="photo-input" type="file" accept="image/*" hidden>
+  </div>
+
+  <div class="scroll-cue">↓ آرام اسکرول کن</div>
+</header>
+
+<section class="section paper" id="about">
+  <div class="section-inner reveal">
+    <div class="section-title">
+      <div class="ornament">❧ ✦ ❧</div>
+      <small>باب نخست</small>
+      <h2>درباره من</h2>
+      <p>نگاهی به جهان فکری و ادبی من</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-text" contenteditable="true">
+        من به جهان شعر فارسی، اندیشه شاعران و پیوند ادبیات با فرهنگ
+        و تاریخ علاقه‌مندم. باور دارم که شعر تنها یک هنر نیست؛
+        بلکه حافظه یک ملت است. در این مسیر، مطالعه، پژوهش و تجربه‌های
+        شخصی دیدگاهم را نسبت به ادبیات و تاریخ شعر پربارتر می‌کنند.
+        <div class="quote">
+          هر برگ کتاب، دریچه‌ای به جهانی دیگر است.
+        </div>
+      </div>
+      <div class="about-emblem">❧</div>
+    </div>
+  </div>
+</section>
+
+<section class="section dark-section">
+  <div class="section-inner reveal">
+    <div class="section-title">
+      <div class="ornament">❈</div>
+      <small>باب دوم</small>
+      <h2>توانایی‌ها</h2>
+      <p>هنرهایی که در مسیر ادبیات دنبال می‌کنم</p>
+    </div>
+
+    <div class="skills">
+      <div class="skill"><div class="skill-icon">✒</div><p>تحلیل شعر</p></div>
+      <div class="skill"><div class="skill-icon">▤</div><p>نگارش ادبی</p></div>
+      <div class="skill"><div class="skill-icon">⌕</div><p>پژوهش</p></div>
+      <div class="skill"><div class="skill-icon">۞</div><p>تاریخ ادبیات</p></div>
+      <div class="skill"><div class="skill-icon">❧</div><p>ویرایش متن</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section paper" id="history">
+  <div class="section-inner reveal">
+    <div class="section-title">
+      <div class="ornament">❧ ✦ ❧</div>
+      <small>باب سوم</small>
+      <h2>مسیر شعر فارسی</h2>
+      <p>از ریشه‌های کهن تا روزگار معاصر</p>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <h3>دوران آغازین</h3>
+        <p contenteditable="true">
+          شناخت رودکی و شکل‌گیری سنت‌های نخستین شعر فارسی دری.
+        </p>
+      </div>
+      <div class="timeline-item">
+        <h3>دوران کلاسیک</h3>
+        <p contenteditable="true">
+          فردوسی، سعدی، حافظ و مولانا؛ میراث‌داران زبان و اندیشه فارسی.
+        </p>
+      </div>
+      <div class="timeline-item">
+        <h3>دوران معاصر</h3>
+        <p contenteditable="true">
+          نیما یوشیج و جریان‌های تازه در شعر نو و ادبیات معاصر.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section dark-section" id="works">
+  <div class="section-inner">
+    <div class="section-title reveal">
+      <div class="ornament">❈</div>
+      <small>باب چهارم</small>
+      <h2>آثار و علاقه‌مندی‌ها</h2>
+      <p>برگی از فعالیت‌های ادبی</p>
+    </div>
+
+    <div class="works">
+      <article class="work reveal">
+        <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=700&q=80" alt="نوشتن و شعر">
+        <div class="work-body">
+          <h3 contenteditable="true">شعر و سروده‌ها</h3>
+          <p contenteditable="true">معرفی اشعار، نوشته‌ها و تجربه‌های شخصی در دنیای کلمات.</p>
+        </div>
+      </article>
+
+      <article class="work reveal">
+        <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=700&q=80" alt="کتابخانه">
+        <div class="work-body">
+          <h3 contenteditable="true">پژوهش ادبی</h3>
+          <p contenteditable="true">مطالعه تاریخ شعر، آثار شاعران و جریان‌های ادبی.</p>
+        </div>
+      </article>
+
+      <article class="work reveal">
+        <img src="https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=700&q=80" alt="کتاب و یادداشت">
+        <div class="work-body">
+          <h3 contenteditable="true">نقد و بررسی</h3>
+          <p contenteditable="true">یادداشت‌ها و تحلیل‌های ادبی درباره شعر و زبان فارسی.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section paper" id="contact">
+  <div class="section-inner reveal">
+    <div class="section-title">
+      <div class="ornament">❧ ✦ ❧</div>
+      <small>باب پنجم</small>
+      <h2>ارتباط با من</h2>
+      <p>برای گفت‌وگو و همکاری‌های ادبی</p>
+    </div>
+    <p contenteditable="true">
+      اگر به شعر، تاریخ و فرهنگ فارسی علاقه‌مندید،
+      خوشحال می‌شوم با شما تبادل نظر کنم.
+    </p>
+    <div class="contact-grid">
+      <a class="contact-link" href="mailto:your-email@example.com">✉ ایمیل</a>
+      <a class="contact-link" href="#" onclick="return false">✦ شبکه اجتماعی</a>
+      <a class="contact-link" href="#home">↑ بازگشت به آغاز</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="calligraphy">با عشق به ادبیات فارسی</div>
+  <p>❧ ✦ ❧</p>
+  <button onclick="window.print()" style="background:transparent;color:var(--gold);border:1px solid var(--gold);padding:9px 18px;cursor:pointer;border-radius:4px">
+    چاپ / ذخیره PDF
+  </button>
+</footer>
+
+<script>
+const profileFrame = document.getElementById('profile-frame');
+const smallPhoto = document.getElementById('small-photo');
+const bigPhoto = document.getElementById('scroll-photo');
+const shade = document.getElementById('photo-shade');
+const input = document.getElementById('photo-input');
+const progress = document.getElementById('progress');
+const hero = document.querySelector('.hero');
+
+let imageURL = smallPhoto.src;
+let ticking = false;
+
+function updateImage(){
+  const rect = profileFrame.getBoundingClientRect();
+  const heroRect = hero.getBoundingClientRect();
+  const scrollY = window.scrollY;
+  const max = document.documentElement.scrollHeight - innerHeight;
+
+  progress.style.width = (max > 0 ? scrollY / max * 100 : 0) + '%';
+
+  // انیمیشن از قاب کوچک تا تصویر تمام‌صفحه
+  const start = Math.max(0, rect.top);
+  const right = Math.max(0, innerWidth - rect.right);
+  const bottom = Math.max(0, innerHeight - rect.bottom);
+  const left = Math.max(0, rect.left);
+
+  const duration = Math.max(innerHeight * .8, 1);
+  const t = Math.min(1, Math.max(0, scrollY / duration));
+  const ease = t * t * (3 - 2 * t);
+
+  const mix = (a,b) => a + (b-a)*ease;
+
+  bigPhoto.style.clipPath =
+    `inset(${mix(start,0)}px ${mix(right,0)}px ${mix(bottom,0)}px ${mix(left,0)}px)`;
+
+  bigPhoto.style.opacity = Math.min(t * 2, .88);
+  shade.style.opacity = Math.min(t * 1.4, .8);
+  bigPhoto.style.filter = `sepia(.35) brightness(${.9 - ease*.42})`;
+  ticking = false;
+}
+
+function requestUpdate(){
+  if(!ticking){
+    requestAnimationFrame(updateImage);
+    ticking = true;
+  }
+}
+
+window.addEventListener('scroll',requestUpdate,{passive:true});
+window.addEventListener('resize',requestUpdate);
+window.addEventListener('load',requestUpdate);
+
+// انتخاب عکس دلخواه
+profileFrame.addEventListener('click',()=>input.click());
+
+input.addEventListener('change',event=>{
+  const file = event.target.files[0];
+  if(!file || !file.type.startsWith('image/')) return;
+
+  if(imageURL.startsWith('blob:')) URL.revokeObjectURL(imageURL);
+
+  imageURL = URL.createObjectURL(file);
+  smallPhoto.src = imageURL;
+  bigPhoto.src = imageURL;
+  bigPhoto.onload = requestUpdate;
+});
+
+// انیمیشن ورود بخش‌ها
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+},{threshold:.12});
+
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+bigPhoto.src = smallPhoto.src;
+updateImage();
+</script>
+</body>
+</html>
